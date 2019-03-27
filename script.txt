@@ -1,0 +1,331 @@
+DROP TABLE clienti  CASCADE CONSTRAINTS
+/
+DROP TABLE abonamente  CASCADE CONSTRAINTS
+/
+DROP TABLE abonati  CASCADE CONSTRAINTS
+/
+DROP TABLE instructor  CASCADE CONSTRAINTS
+/
+DROP TABLE activitati  CASCADE CONSTRAINTS
+/
+DROP TABLE orar  CASCADE CONSTRAINTS
+/
+DROP TABLE exercitii  CASCADE CONSTRAINTS
+/
+DROP TABLE muschi  CASCADE CONSTRAINTS
+/
+DROP TABLE lucreaza  CASCADE CONSTRAINTS
+/
+DROP TABLE antrenament  CASCADE CONSTRAINTS
+/
+DROP TABLE repartizare CASCADE CONSTRAINTS
+/
+DROP TABLE grupa_pref CASCADE CONSTRAINTS
+/
+
+CREATE TABLE clienti (
+id int PRIMARY KEY NOT NULL,
+data_nastere DATE,
+nume VARCHAR(30),
+prenume VARCHAR(30),
+inaltime int,
+greutate int,
+experienta int
+)
+/
+CREATE TABLE abonamente (
+id int PRIMARY KEY NOT NULL,
+tip int,
+pret int
+)
+/
+CREATE TABLE abonati (
+data_start date,
+data_fin date,
+id_abonament int,
+id_client int,
+CONSTRAINT fk_id_abonament FOREIGN KEY (id_abonament) REFERENCES abonamente(id),
+CONSTRAINT fk_id_client FOREIGN KEY (id_client) REFERENCES clienti(id)
+)
+/
+CREATE TABLE activitati (
+id int PRIMARY KEY NOT NULL,
+nume varchar(20),
+durata int
+)
+/
+CREATE TABLE instructori (
+id int PRIMARY KEY NOT NULL,
+nume varchar(30),
+prenume varchar(30),
+data_angajare date
+)
+/
+CREATE TABLE orar (
+id int PRIMARY KEY NOT NULL,
+id_activitate int,
+id_instructor int,
+zi varchar(10),
+startOra varchar(10),
+endOra varchar(10),
+CONSTRAINT fk_id_activitate FOREIGN KEY (id_activitate) REFERENCES activitati(id),
+CONSTRAINT fk_id_instructor FOREIGN KEY (id_instructor) REFERENCES instructori(id)
+)
+
+/
+CREATE TABLE exercitii (
+id int PRIMARY KEY NOT NULL,
+nume varchar(20)
+)
+/
+CREATE TABLE muschi (
+id int PRIMARY KEY NOT NULL,
+nume varchar(20)
+)
+/
+CREATE  TABLE lucreaza (
+id_exercitiu int,
+id_muschi int,
+procent int,
+CONSTRAINT fk_id_exercitiu FOREIGN KEY (id_exercitiu) REFERENCES exercitii(id),
+CONSTRAINT fk_id_muschi FOREIGN KEY (id_muschi) REFERENCES muschi(id)
+)
+
+CREATE TABLE repartizare (
+id_client int,
+id_orar int,
+CONSTRAINT fk_id_client_repartizare FOREIGN KEY (id_client) REFERENCES clienti(id),
+CONSTRAINT fk_id_orar FOREIGN KEY (id_orar) REFERENCES orar(id)
+)
+/
+CREATE TABLE grupa_pref (
+id_muschi int,
+id_client int,
+CONSTRAINT fk_id_client_pref FOREIGN KEY (id_client) REFERENCES clienti(id),
+CONSTRAINT fk_id_muschi_pref FOREIGN KEY (id_muschi) REFERENCES muschi(id)
+)
+/
+
+CREATE TABLE antrenament (
+id int PRIMARY KEY NOT NULL,
+id_exercitiu int,
+id_client int,
+greutate int,
+seturi int,
+repetitii int,
+CONSTRAINT fk_id_exercitiu_antrenament FOREIGN KEY (id_exercitiu) REFERENCES exercitii(id),
+CONSTRAINT fk_id_client_antrenament FOREIGN KEY (id_client) REFERENCES clienti(id)
+)
+/
+SET SERVEROUTPUT ON;
+
+DECLARE
+TYPE varr is VARRAY(30) of varchar(30);
+v_muschi varr;
+v_exercitii varr;
+BEGIN
+v_muschi := varr('biceps','triceps','umeri','piept','abdomen','spate_sus','spate_jos','gluteu','qvadriveps','hamstring');
+v_exercitii := varr('squats','deadlift','bench','pullups','ohp','bicep curls','skull crushers','leg extensions','hamstring curls','crunches','shoulder raises','dumbell flies','dumbell rows');
+FOR i in 1..v_exercitii.count LOOP
+insert into exercitii(id, nume) values (i, v_exercitii(i)); 
+END LOOP;
+
+for i in 1..v_muschi.count LOOP
+insert into muschi(id, nume) values (i, v_muschi(i));
+end loop;
+
+END;
+
+insert into lucreaza(id_exercitiu, id_muschi, procent) values (1,9,100);
+insert into lucreaza(id_exercitiu, id_muschi, procent) values (1,8,100);
+insert into lucreaza(id_exercitiu, id_muschi, procent) values (1,7,70);
+insert into lucreaza(id_exercitiu, id_muschi, procent) values (1,10,10);
+
+insert into lucreaza(id_exercitiu, id_muschi, procent) values (2,9,40);
+insert into lucreaza(id_exercitiu, id_muschi, procent) values (2,8,60);
+insert into lucreaza(id_exercitiu, id_muschi, procent) values (2,10,100);
+insert into lucreaza(id_exercitiu, id_muschi, procent) values (2,6,100);
+insert into lucreaza(id_exercitiu, id_muschi, procent) values (2,7,40);
+
+insert into lucreaza(id_exercitiu, id_muschi, procent) values (3,4,100);
+insert into lucreaza(id_exercitiu, id_muschi, procent) values (3,2,80);
+insert into lucreaza(id_exercitiu, id_muschi, procent) values (3,3,50);
+
+insert into lucreaza(id_exercitiu, id_muschi, procent) values (4,6,100);
+insert into lucreaza(id_exercitiu, id_muschi, procent) values (4,1,100);
+insert into lucreaza(id_exercitiu, id_muschi, procent) values (4,3,20);
+
+insert into lucreaza(id_exercitiu, id_muschi, procent) values (5,3,100);
+insert into lucreaza(id_exercitiu, id_muschi, procent) values (5,2,50);
+insert into lucreaza(id_exercitiu, id_muschi, procent) values (5,4,20);
+
+
+insert into lucreaza(id_exercitiu, id_muschi, procent) values (6,1,100);
+
+insert into lucreaza(id_exercitiu, id_muschi, procent) values (7,2,100);
+insert into lucreaza(id_exercitiu, id_muschi, procent) values (8,9,100);
+insert into lucreaza(id_exercitiu, id_muschi, procent) values (9,10,100);
+insert into lucreaza(id_exercitiu, id_muschi, procent) values (10,5,100);
+insert into lucreaza(id_exercitiu, id_muschi, procent) values (11,3,100);
+insert into lucreaza(id_exercitiu, id_muschi, procent) values (12,4,100);
+insert into lucreaza(id_exercitiu, id_muschi, procent) values (13,6,100);
+
+
+insert into instructori(id, nume, prenume, data_angajare) values (1,'Ababei','Maria',TO_DATE('2019-03-01','yyyy-mm-dd') );
+insert into instructori(id, nume, prenume, data_angajare) values (2,'Alexe','Marius',TO_DATE('2018-10-07','yyyy-mm-dd') );
+insert into instructori(id, nume, prenume, data_angajare) values (3,'Popescu','Adrian',TO_DATE('2019-07-01','yyyy-mm-dd') );
+insert into instructori(id, nume, prenume, data_angajare) values (4,'Lazar','Andreea',TO_DATE('2017-01-24','yyyy-mm-dd') );
+insert into instructori(id, nume, prenume, data_angajare) values (5,'Patrut','Cosmin',TO_DATE('2019-03-11','yyyy-mm-dd') );
+insert into instructori(id, nume, prenume, data_angajare) values (6,'Agafitei','Bianca',TO_DATE('2019-07-01','yyyy-mm-dd') );
+insert into instructori(id, nume, prenume, data_angajare) values (7,'Carp','Denis',TO_DATE('2019-05-12','yyyy-mm-dd') );
+insert into instructori(id, nume, prenume, data_angajare) values (8,'Cerasela','Carmen',TO_DATE('2019-03-22','yyyy-mm-dd') );
+insert into instructori(id, nume, prenume, data_angajare) values (9,'Aioanei','Iulian',TO_DATE('2018-02-13','yyyy-mm-dd') );
+insert into instructori(id, nume, prenume, data_angajare) values (10,'Albu','Ioan',TO_DATE('2019-01-06','yyyy-mm-dd') );
+insert into instructori(id, nume, prenume, data_angajare) values (11,'Andrei','Sorin',TO_DATE('2018-01-01','yyyy-mm-dd') );
+
+
+
+DECLARE
+TYPE varr is VARRAY(30) of varchar(20);
+activ varr;
+BEGIN
+activ  := varr('tae-bo','circuit','core','hit','kangoo','step','pilates','aerobic','aerobic dance','cardio','zumba','fitness');
+FOR i in 1..activ.count LOOP
+insert into activitati (id,nume,durata) values (i, activ(i), 60);
+END LOOP;
+END;
+
+DECLARE 
+  TYPE varr IS VARRAY(1000) OF varchar(30);
+  lista_nume varr := varr('Ababei','Acasandrei','Adascalitei','Afanasie','Agafitei','Agape','Aioanei','Alexandrescu','Alexandru','Alexe','Alexii','Amarghioalei','Ambroci','Andonesei','Andrei','Andrian','Andrici','Andronic','Andros','Anghelina','Anita','Antochi','Antonie','Apetrei','Apostol','Arhip','Arhire','Arteni','Arvinte','Asaftei','Asofiei','Aungurenci','Avadanei','Avram','Babei','Baciu','Baetu','Balan','Balica','Banu','Barbieru','Barzu','Bazgan','Bejan','Bejenaru','Belcescu','Belciuganu','Benchea','Bilan','Birsanu','Bivol','Bizu','Boca','Bodnar','Boistean','Borcan','Bordeianu','Botezatu','Bradea','Braescu','Budaca','Bulai','Bulbuc-aioanei','Burlacu','Burloiu','Bursuc','Butacu','Bute','Buza','Calancea','Calinescu','Capusneanu','Caraiman','Carbune','Carp','Catana','Catiru','Catonoiu','Cazacu','Cazamir','Cebere','Cehan','Cernescu','Chelaru','Chelmu','Chelmus','Chibici','Chicos','Chilaboc','Chile','Chiriac','Chirila','Chistol','Chitic','Chmilevski','Cimpoesu','Ciobanu','Ciobotaru','Ciocoiu','Ciofu','Ciornei','Citea','Ciucanu','Clatinici','Clim','Cobuz','Coca','Cojocariu','Cojocaru','Condurache','Corciu','Corduneanu','Corfu','Corneanu','Corodescu','Coseru','Cosnita','Costan','Covatariu','Cozma','Cozmiuc','Craciunas','Crainiceanu','Creanga','Cretu','Cristea','Crucerescu','Cumpata','Curca','Cusmuliuc','Damian','Damoc','Daneliuc','Daniel','Danila','Darie','Dascalescu','Dascalu','Diaconu','Dima','Dimache','Dinu','Dobos','Dochitei','Dochitoiu','Dodan','Dogaru','Domnaru','Dorneanu','Dragan','Dragoman','Dragomir','Dragomirescu','Duceac','Dudau','Durnea','Edu','Eduard','Eusebiu','Fedeles','Ferestraoaru','Filibiu','Filimon','Filip','Florescu','Folvaiter','Frumosu','Frunza','Galatanu','Gavrilita','Gavriliuc','Gavrilovici','Gherase','Gherca','Ghergu','Gherman','Ghibirdic','Giosanu','Gitlan','Giurgila','Glodeanu','Goldan','Gorgan','Grama','Grigore','Grigoriu','Grosu','Grozavu','Gurau','Haba','Harabula','Hardon','Harpa','Herdes','Herscovici','Hociung','Hodoreanu','Hostiuc','Huma','Hutanu','Huzum','Iacob','Iacobuta','Iancu','Ichim','Iftimesei','Ilie','Insuratelu','Ionesei','Ionesi','Ionita','Iordache','Iordache-tiroiu','Iordan','Iosub','Iovu','Irimia','Ivascu','Jecu','Jitariuc','Jitca','Joldescu','Juravle','Larion','Lates','Latu','Lazar','Leleu','Leon','Leonte','Leuciuc','Leustean','Luca','Lucaci','Lucasi','Luncasu','Lungeanu','Lungu','Lupascu','Lupu','Macariu','Macoveschi','Maftei','Maganu','Mangalagiu','Manolache','Manole','Marcu','Marinov','Martinas','Marton','Mataca','Matcovici','Matei','Maties','Matrana','Maxim','Mazareanu','Mazilu','Mazur','Melniciuc-puica','Micu','Mihaela','Mihai','Mihaila','Mihailescu','Mihalachi','Mihalcea','Mihociu','Milut','Minea','Minghel','Minuti','Miron','Mitan','Moisa','Moniry-abyaneh','Morarescu','Morosanu','Moscu','Motrescu','Motroi','Munteanu','Murarasu','Musca','Mutescu','Nastaca','Nechita','Neghina','Negrus','Negruser','Negrutu','Nemtoc','Netedu','Nica','Nicu','Oana','Olanuta','Olarasu','Olariu','Olaru','Onu','Opariuc','Oprea','Ostafe','Otrocol','Palihovici','Pantiru','Pantiruc','Paparuz','Pascaru','Patachi','Patras','Patriche','Perciun','Perju','Petcu','Pila','Pintilie','Piriu','Platon','Plugariu','Podaru','Poenariu','Pojar','Popa','Popescu','Popovici','Poputoaia','Postolache','Predoaia','Prisecaru','Procop','Prodan','Puiu','Purice','Rachieru','Razvan','Reut','Riscanu','Riza','Robu','Roman','Romanescu','Romaniuc','Rosca','Rusu','Samson','Sandu','Sandulache','Sava','Savescu','Schifirnet','Scortanu','Scurtu','Sfarghiu','Silitra','Simiganoschi','Simion','Simionescu','Simionesei','Simon','Sitaru','Sleghel','Sofian','Soficu','Sparhat','Spiridon','Stan','Stavarache','Stefan','Stefanita','Stingaciu','Stiufliuc','Stoian','Stoica','Stoleru','Stolniceanu','Stolnicu','Strainu','Strimtu','Suhani','Tabusca','Talif','Tanasa','Teclici','Teodorescu','Tesu','Tifrea','Timofte','Tincu','Tirpescu','Toader','Tofan','Toma','Toncu','Trifan','Tudosa','Tudose','Tuduri','Tuiu','Turcu','Ulinici','Unghianu','Ungureanu','Ursache','Ursachi','Urse','Ursu','Varlan','Varteniuc','Varvaroi','Vasilache','Vasiliu','Ventaniuc','Vicol','Vidru','Vinatoru','Vlad','Voaides','Vrabie','Vulpescu','Zamosteanu','Zazuleac');
+  lista_prenume_fete varr := varr('Adina','Alexandra','Alina','Ana','Anca','Anda','Andra','Andreea','Andreia','Antonia','Bianca','Camelia','Claudia','Codrina','Cristina','Daniela','Daria','Delia','Denisa','Diana','Ecaterina','Elena','Eleonora','Elisa','Ema','Emanuela','Emma','Gabriela','Georgiana','Ileana','Ilona','Ioana','Iolanda','Irina','Iulia','Iuliana','Larisa','Laura','Loredana','Madalina','Malina','Manuela','Maria','Mihaela','Mirela','Monica','Oana','Paula','Petruta','Raluca','Sabina','Sanziana','Simina','Simona','Stefana','Stefania','Tamara','Teodora','Theodora','Vasilica','Xena');
+  lista_prenume_baieti varr := varr('Adrian','Alex','Alexandru','Alin','Andreas','Andrei','Aurelian','Beniamin','Bogdan','Camil','Catalin','Cezar','Ciprian','Claudiu','Codrin','Constantin','Corneliu','Cosmin','Costel','Cristian','Damian','Dan','Daniel','Danut','Darius','Denise','Dimitrie','Dorian','Dorin','Dragos','Dumitru','Eduard','Elvis','Emil','Ervin','Eugen','Eusebiu','Fabian','Filip','Florian','Florin','Gabriel','George','Gheorghe','Giani','Giulio','Iaroslav','Ilie','Ioan','Ion','Ionel','Ionut','Iosif','Irinel','Iulian','Iustin','Laurentiu','Liviu','Lucian','Marian','Marius','Matei','Mihai','Mihail','Nicolae','Nicu','Nicusor','Octavian','Ovidiu','Paul','Petru','Petrut','Radu','Rares','Razvan','Richard','Robert','Roland','Rolland','Romanescu','Sabin','Samuel','Sebastian','Sergiu','Silviu','Stefan','Teodor','Teofil','Theodor','Tudor','Vadim','Valentin','Valeriu','Vasile','Victor','Vlad','Vladimir','Vladut');
+  v_rand int;
+  v_date date;
+  v_prenume varchar(30);
+  v_nume varchar(30);
+BEGIN
+  for i in 1..1000000 LOOP
+  v_date :=  TO_DATE( TRUNC(  DBMS_RANDOM.VALUE(TO_CHAR(DATE '1950-01-01','J'), TO_CHAR(DATE '2003-01-01','J')    ) ),'J' ) ;
+  v_rand := DBMS_RANDOM.VALUE(0,100);
+
+  if (v_rand < 50) then
+    v_prenume :=  lista_prenume_fete(DBMS_RANDOM.VALUE(1,lista_prenume_fete.count));
+  else
+  v_prenume :=  lista_prenume_baieti(DBMS_RANDOM.VALUE(1,lista_prenume_baieti.count));
+  end if;
+  v_nume := lista_nume(DBMS_RANDOM.VALUE(1,lista_nume.count));
+  insert into clienti(id, data_nastere, nume, prenume, inaltime, greutate, experienta) values (i, v_date, v_nume, v_prenume, DBMS_RANDOM.VALUE(140,190), DBMS_RANDOM.VALUE(40,120), DBMS_RANDOM.VALUE(1,5));  
+  end loop;
+END;
+
+DECLARE
+v_start varchar(10);
+v_end varchar(10);
+ TYPE varr IS VARRAY(10) OF varchar(20);
+ zile varr;
+ zi varchar(10);
+v_rand int := 0;
+v_rand_act int; --12
+v_rand_instr int; --11
+v_rand_nr int; --30
+
+BEGIN
+ zile := varr('luni','marti','miercuri','joi','vineri','sambata','duminica');
+-- 8-20
+FOR i in 1..7 LOOP
+    zi := zile(i);
+    for j in 1..12 LOOP
+        v_start := TO_CHAR(7+j || ':00' );
+        v_end := TO_CHAR(7+j || ':55');
+        v_rand_act := DBMS_RANDOM.VALUE(1,12);
+        v_rand_instr := DBMS_RANDOM.VALUE(1,11);
+        v_rand_nr := DBMS_RANDOM.VALUE(1,30);
+        
+        v_rand := v_rand + 1;
+        insert into orar(id, id_activitate, id_instructor, startora, endora,zi ) values(v_rand, v_rand_act, v_rand_instr, v_start, v_end, zi);
+        
+    END LOOP;
+END LOOP;
+
+END;
+
+DECLARE
+-- 84 ore
+v_rand1 int;
+v_rand2 int;
+v_client int;
+c_orar int;
+BEGIN
+
+for i in 1..84 LOOP
+    v_rand1 := DBMS_RANDOM.VALUE(1,30);
+    v_rand2:= DBMS_RANDOM.VALUE(1,1000000-30);
+    for j in 1..v_rand1 LOOP
+        insert into repartizare(id_client, id_orar) values (v_rand2, i);
+        v_rand2 := v_rand2 + 1;
+    END LOOP;
+END LOOP;
+
+END;
+
+insert into abonamente(id, tip, pret) values (1,1, 50);
+insert into abonamente(id, tip, pret) values (2,2, 100);
+insert into abonamente(id, tip, pret) values (3,3, 180);
+insert into abonamente(id, tip, pret) values (4,4, 300);
+
+DECLARE
+
+v_rand1 int;
+v_rand2 int;
+v_rand3 int;
+id_ab int;
+dataS date;
+dataF date;
+
+BEGIN
+for i in 1..1000000 LOOP
+    v_rand1 :=  DBMS_RANDOM.VALUE(1,100);
+    if(v_rand1 < 80) then
+        id_ab :=  DBMS_RANDOM.VALUE(1,4);
+        v_rand2 :=  DBMS_RANDOM.VALUE(1,24);
+        v_rand3:=  DBMS_RANDOM.VALUE(1,v_rand2);
+        dataS := add_months(sysdate, -v_rand2);
+        dataF := add_months( sysdate, -v_rand2 + v_rand3);
+        insert into abonati(data_start, data_fin, id_abonament, id_client) values (dataS, dataF, id_ab, i);
+    end if;
+END LOOP;
+END;
+
+DECLARE
+v_rand_ex int;
+v_rand_gr int;
+v_rand_set int;
+v_rand_rep int;
+v_rand int;
+j int := 0;
+p int;
+BEGIN
+FOR i in 1..1000000 LOOP
+    v_rand := DBMS_RANDOM.VALUE(1,100);
+    if(v_rand < 30) then
+        p:= 1;
+        FOR i in 1..4 LOOP
+            j := j + 1;
+            v_rand_ex := DBMS_RANDOM.VALUE(1,13);
+            v_rand_gr := DBMS_RANDOM.VALUE(5,100);
+            v_rand_set := DBMS_RANDOM.VALUE(3,7);
+            v_rand_rep := DBMS_RANDOM.VALUE(5,15);
+            insert into antrenament(id, id_exercitiu, id_client, greutate, seturi, repetitii) values (j,v_rand_ex, i, v_rand_gr, v_rand_set, v_rand_rep);
+            
+            v_rand_gr := DBMS_RANDOM.VALUE(p,p+1);
+            insert into grupa_pref(id_muschi, id_client) values (v_rand_gr, i);
+            p := p + 2;
+            
+        END LOOP;
+    END IF;
+END LOOP;
+
+END;
+
+
