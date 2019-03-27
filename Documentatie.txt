@@ -38,7 +38,12 @@ de lucru a unor grupe musculare optate de client ;
 
 
 Motivatie utilizare structuri de date
-Datorita numarului abundent de date, am folosit tabele pentru a stoca majoritatea datelor. Tabelele sunt structurate astfel incat lucrul cu ele este logic si usor. Deasemenea prin folosirea tabelelor de relatie, cele cu constrangeri de chei straine, sunt eliminate anumite redundante inutile, baza de date ocupand mai putin spatiu. 
-Pentru clienti de top vom alege sa folosim un view pentru ai reprezenta. Aceasta alegere este motivata prin faptul ca utilizarea unui tabel pentru stocarea lor ar insemna risipa de spatiu si calcule aditionale de inserare si stergere inutile. Prin folosirea unui view ce are la baza un select care alege clienti dupa criteriile propuse de noi, simplificam si eficientizam lucrul cu baza de date.
+Datorita numarului abundent de date, am folosit tabele pentru a stoca majoritatea datelor. Tabelele sunt structurate
+astfel incat lucrul cu ele este logic si usor. Deasemenea prin folosirea tabelelor de relatie, cele cu constrangeri de
+chei straine, sunt eliminate anumite redundante inutile, baza de date ocupand mai putin spatiu. 
+Pentru clienti de top vom alege sa folosim un view pentru ai reprezenta. Aceasta alegere este motivata prin faptul ca 
+utilizarea unui tabel pentru stocarea lor ar insemna risipa de spatiu si calcule aditionale de inserare si stergere inutile.
+Prin folosirea unui view ce are la baza un select care alege clienti dupa criteriile propuse de noi, simplificam si eficientizam 
+lucrul cu baza de date.
 
 
