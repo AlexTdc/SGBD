@@ -11,23 +11,32 @@ reduceri, sau facilitarea accesului in anumite zone sportive (pachete disponibil
 Tabelele aferente gestiunii fiecarui client in parte vor contine informatii despre: id_client,
 nume, prenume, CNP, data_nastere, perioada_abonament etc. 
 Din punct de vedere a modelarii acestor date, aplicatia va dispune de anumite functionalitati, cum
-ar fi inregistrarea frecventei fiecarui client la sala, cu scopul de a le acorda fiecaruia in parte discounturi sau cumularea pachetului de activitati platit, cu alte pachete de activitati propuse, 
-sau recalcularea abonamentelor in functie de doleantele clientului. De asemenea, unii clienti vor avea posibilitatea de a-si putea calcula indicele de masa corporala (indice BMI) a acestora cu ajutorul sexului, varstei, greutatii si inaltimii lor. 
-In functie de popularitatea activitatilor si a pachetelor oferite, clientii nou-veniti si neexperimentati vor primi sugestii cu privire la abonamentele care li se potrivesc.
-Pentru clientii de top, aplicatia va pune la dispozitia acestora un antrenament personalizat de fitness, raportat la grupele musculare pe care acestia doresc sa puna accentul, sau, un antrenament echilibrat, pentru tonifierea corpului, totul cu ajutorul profilului lor sportiv .  Persoanele cu 
-vechime mare si care au achizitonat pachetele si care s-au inscris la cat mai multe cativitati sportive, vor primi automat titlul de clienti de top.
+ar fi inregistrarea frecventei fiecarui client la sala, cu scopul de a le acorda fiecaruia in parte
+discounturi sau cumularea pachetului de activitati platit, cu alte pachete de activitati propuse, 
+sau recalcularea abonamentelor in functie de doleantele clientului. De asemenea, unii clienti vor
+avea posibilitatea de a-si putea calcula indicele de masa corporala (indice BMI) a acestora cu ajutorul 
+sexului, varstei, greutatii si inaltimii lor. 
+In functie de popularitatea activitatilor si a pachetelor oferite, clientii nou-veniti si neexperimentati vor
+primi sugestii cu privire la abonamentele care li se potrivesc.
+Pentru clientii de top, aplicatia va pune la dispozitia acestora un antrenament personalizat de fitness, raportat
+la grupele musculare pe care acestia doresc sa puna accentul, sau, un antrenament echilibrat, pentru tonifierea 
+corpului, totul cu ajutorul profilului lor sportiv .  Persoanele cu 
+vechime mare si care au achizitonat pachetele si care s-au inscris la cat mai multe cativitati sportive, vor
+primi automat titlul de clienti de top.
 
 
 
 FUNCTII SI PROCEDURI
-•	Recalculari abonamente (cumulari cu alte pachete, extindere abonament etc.) ;
-•	Calcularea frecventei fiecarui client la sala, precum si la activitatile din cadrul ei ;
-•	Calculator de reduceri cu ajutorul frecventei la sala, abonamente cumparate, alte promotii.. ;
-•	Body Mass Index (BMI) Calculator ;
-•	Recomandarea de activitati pentru noii-veniti in functie de popularitatea activitatilor ;
-•	Calculare clienti de top ;
-•	Pentru clientii de top, personalizarea unui antrenament de fitness echilibrat / orientat pe procentele de lucru a unor grupe musculare optate de client ;
-•	
+â€¢	Recalculari abonamente (cumulari cu alte pachete, extindere abonament etc.) ;
+â€¢	Calcularea frecventei fiecarui client la sala, precum si la activitatile din cadrul ei ;
+â€¢	Calculator de reduceri cu ajutorul frecventei la sala, abonamente cumparate, alte promotii.. ;
+â€¢	Body Mass Index (BMI) Calculator ;
+â€¢	Recomandarea de activitati pentru noii-veniti in functie de popularitatea activitatilor ;
+â€¢	Calculare clienti de top ;
+â€¢	Pentru clientii de top, personalizarea unui antrenament de fitness echilibrat / orientat pe procentele 
+de lucru a unor grupe musculare optate de client ;
+
+
 Motivatie utilizare structuri de date
 Datorita numarului abundent de date, am folosit tabele pentru a stoca majoritatea datelor. Tabelele sunt structurate astfel incat lucrul cu ele este logic si usor. Deasemenea prin folosirea tabelelor de relatie, cele cu constrangeri de chei straine, sunt eliminate anumite redundante inutile, baza de date ocupand mai putin spatiu. 
 Pentru clienti de top vom alege sa folosim un view pentru ai reprezenta. Aceasta alegere este motivata prin faptul ca utilizarea unui tabel pentru stocarea lor ar insemna risipa de spatiu si calcule aditionale de inserare si stergere inutile. Prin folosirea unui view ce are la baza un select care alege clienti dupa criteriile propuse de noi, simplificam si eficientizam lucrul cu baza de date.
