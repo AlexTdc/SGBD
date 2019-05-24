@@ -4,7 +4,7 @@ DROP TABLE abonamente  CASCADE CONSTRAINTS
 /
 DROP TABLE abonati  CASCADE CONSTRAINTS
 /
-DROP TABLE instructor  CASCADE CONSTRAINTS
+DROP TABLE instructori  CASCADE CONSTRAINTS
 /
 DROP TABLE activitati  CASCADE CONSTRAINTS
 /
@@ -90,7 +90,7 @@ procent int,
 CONSTRAINT fk_id_exercitiu FOREIGN KEY (id_exercitiu) REFERENCES exercitii(id),
 CONSTRAINT fk_id_muschi FOREIGN KEY (id_muschi) REFERENCES muschi(id)
 )
-
+/
 CREATE TABLE repartizare (
 id_client int,
 id_orar int,
@@ -113,12 +113,13 @@ id_client int,
 greutate int,
 seturi int,
 repetitii int,
+data_ant timestamp,
 CONSTRAINT fk_id_exercitiu_antrenament FOREIGN KEY (id_exercitiu) REFERENCES exercitii(id),
 CONSTRAINT fk_id_client_antrenament FOREIGN KEY (id_client) REFERENCES clienti(id)
 )
 /
 SET SERVEROUTPUT ON;
-
+/
 DECLARE
 TYPE varr is VARRAY(30) of varchar(30);
 v_muschi varr;
@@ -135,6 +136,8 @@ insert into muschi(id, nume) values (i, v_muschi(i));
 end loop;
 
 END;
+
+/
 
 insert into lucreaza(id_exercitiu, id_muschi, procent) values (1,9,100);
 insert into lucreaza(id_exercitiu, id_muschi, procent) values (1,8,100);
@@ -183,7 +186,7 @@ insert into instructori(id, nume, prenume, data_angajare) values (9,'Aioanei','I
 insert into instructori(id, nume, prenume, data_angajare) values (10,'Albu','Ioan',TO_DATE('2019-01-06','yyyy-mm-dd') );
 insert into instructori(id, nume, prenume, data_angajare) values (11,'Andrei','Sorin',TO_DATE('2018-01-01','yyyy-mm-dd') );
 
-
+/
 
 DECLARE
 TYPE varr is VARRAY(30) of varchar(20);
@@ -195,6 +198,7 @@ insert into activitati (id,nume,durata) values (i, activ(i), 60);
 END LOOP;
 END;
 
+/
 DECLARE 
   TYPE varr IS VARRAY(1000) OF varchar(30);
   lista_nume varr := varr('Ababei','Acasandrei','Adascalitei','Afanasie','Agafitei','Agape','Aioanei','Alexandrescu','Alexandru','Alexe','Alexii','Amarghioalei','Ambroci','Andonesei','Andrei','Andrian','Andrici','Andronic','Andros','Anghelina','Anita','Antochi','Antonie','Apetrei','Apostol','Arhip','Arhire','Arteni','Arvinte','Asaftei','Asofiei','Aungurenci','Avadanei','Avram','Babei','Baciu','Baetu','Balan','Balica','Banu','Barbieru','Barzu','Bazgan','Bejan','Bejenaru','Belcescu','Belciuganu','Benchea','Bilan','Birsanu','Bivol','Bizu','Boca','Bodnar','Boistean','Borcan','Bordeianu','Botezatu','Bradea','Braescu','Budaca','Bulai','Bulbuc-aioanei','Burlacu','Burloiu','Bursuc','Butacu','Bute','Buza','Calancea','Calinescu','Capusneanu','Caraiman','Carbune','Carp','Catana','Catiru','Catonoiu','Cazacu','Cazamir','Cebere','Cehan','Cernescu','Chelaru','Chelmu','Chelmus','Chibici','Chicos','Chilaboc','Chile','Chiriac','Chirila','Chistol','Chitic','Chmilevski','Cimpoesu','Ciobanu','Ciobotaru','Ciocoiu','Ciofu','Ciornei','Citea','Ciucanu','Clatinici','Clim','Cobuz','Coca','Cojocariu','Cojocaru','Condurache','Corciu','Corduneanu','Corfu','Corneanu','Corodescu','Coseru','Cosnita','Costan','Covatariu','Cozma','Cozmiuc','Craciunas','Crainiceanu','Creanga','Cretu','Cristea','Crucerescu','Cumpata','Curca','Cusmuliuc','Damian','Damoc','Daneliuc','Daniel','Danila','Darie','Dascalescu','Dascalu','Diaconu','Dima','Dimache','Dinu','Dobos','Dochitei','Dochitoiu','Dodan','Dogaru','Domnaru','Dorneanu','Dragan','Dragoman','Dragomir','Dragomirescu','Duceac','Dudau','Durnea','Edu','Eduard','Eusebiu','Fedeles','Ferestraoaru','Filibiu','Filimon','Filip','Florescu','Folvaiter','Frumosu','Frunza','Galatanu','Gavrilita','Gavriliuc','Gavrilovici','Gherase','Gherca','Ghergu','Gherman','Ghibirdic','Giosanu','Gitlan','Giurgila','Glodeanu','Goldan','Gorgan','Grama','Grigore','Grigoriu','Grosu','Grozavu','Gurau','Haba','Harabula','Hardon','Harpa','Herdes','Herscovici','Hociung','Hodoreanu','Hostiuc','Huma','Hutanu','Huzum','Iacob','Iacobuta','Iancu','Ichim','Iftimesei','Ilie','Insuratelu','Ionesei','Ionesi','Ionita','Iordache','Iordache-tiroiu','Iordan','Iosub','Iovu','Irimia','Ivascu','Jecu','Jitariuc','Jitca','Joldescu','Juravle','Larion','Lates','Latu','Lazar','Leleu','Leon','Leonte','Leuciuc','Leustean','Luca','Lucaci','Lucasi','Luncasu','Lungeanu','Lungu','Lupascu','Lupu','Macariu','Macoveschi','Maftei','Maganu','Mangalagiu','Manolache','Manole','Marcu','Marinov','Martinas','Marton','Mataca','Matcovici','Matei','Maties','Matrana','Maxim','Mazareanu','Mazilu','Mazur','Melniciuc-puica','Micu','Mihaela','Mihai','Mihaila','Mihailescu','Mihalachi','Mihalcea','Mihociu','Milut','Minea','Minghel','Minuti','Miron','Mitan','Moisa','Moniry-abyaneh','Morarescu','Morosanu','Moscu','Motrescu','Motroi','Munteanu','Murarasu','Musca','Mutescu','Nastaca','Nechita','Neghina','Negrus','Negruser','Negrutu','Nemtoc','Netedu','Nica','Nicu','Oana','Olanuta','Olarasu','Olariu','Olaru','Onu','Opariuc','Oprea','Ostafe','Otrocol','Palihovici','Pantiru','Pantiruc','Paparuz','Pascaru','Patachi','Patras','Patriche','Perciun','Perju','Petcu','Pila','Pintilie','Piriu','Platon','Plugariu','Podaru','Poenariu','Pojar','Popa','Popescu','Popovici','Poputoaia','Postolache','Predoaia','Prisecaru','Procop','Prodan','Puiu','Purice','Rachieru','Razvan','Reut','Riscanu','Riza','Robu','Roman','Romanescu','Romaniuc','Rosca','Rusu','Samson','Sandu','Sandulache','Sava','Savescu','Schifirnet','Scortanu','Scurtu','Sfarghiu','Silitra','Simiganoschi','Simion','Simionescu','Simionesei','Simon','Sitaru','Sleghel','Sofian','Soficu','Sparhat','Spiridon','Stan','Stavarache','Stefan','Stefanita','Stingaciu','Stiufliuc','Stoian','Stoica','Stoleru','Stolniceanu','Stolnicu','Strainu','Strimtu','Suhani','Tabusca','Talif','Tanasa','Teclici','Teodorescu','Tesu','Tifrea','Timofte','Tincu','Tirpescu','Toader','Tofan','Toma','Toncu','Trifan','Tudosa','Tudose','Tuduri','Tuiu','Turcu','Ulinici','Unghianu','Ungureanu','Ursache','Ursachi','Urse','Ursu','Varlan','Varteniuc','Varvaroi','Vasilache','Vasiliu','Ventaniuc','Vicol','Vidru','Vinatoru','Vlad','Voaides','Vrabie','Vulpescu','Zamosteanu','Zazuleac');
@@ -206,7 +210,7 @@ DECLARE
   v_nume varchar(30);
 BEGIN
   for i in 1..1000000 LOOP
-  v_date :=  TO_DATE( TRUNC(  DBMS_RANDOM.VALUE(TO_CHAR(DATE '1950-01-01','J'), TO_CHAR(DATE '2003-01-01','J')    ) ),'J' ) ;
+  v_date :=  TO_DATE( TRUNC(  DBMS_RANDOM.VALUE(TO_CHAR(DATE '1950-01-01','J'), TO_CHAR(DATE '2003-01-01','J') ) ),'J' ) ;
   v_rand := DBMS_RANDOM.VALUE(0,100);
 
   if (v_rand < 50) then
@@ -218,6 +222,7 @@ BEGIN
   insert into clienti(id, data_nastere, nume, prenume, inaltime, greutate, experienta) values (i, v_date, v_nume, v_prenume, DBMS_RANDOM.VALUE(140,190), DBMS_RANDOM.VALUE(40,120), DBMS_RANDOM.VALUE(1,5));  
   end loop;
 END;
+/
 
 DECLARE
 v_start varchar(10);
@@ -249,7 +254,7 @@ FOR i in 1..7 LOOP
 END LOOP;
 
 END;
-
+/
 DECLARE
 -- 84 ore
 v_rand1 int;
@@ -268,12 +273,12 @@ for i in 1..84 LOOP
 END LOOP;
 
 END;
-
+/
 insert into abonamente(id, tip, pret) values (1,1, 50);
 insert into abonamente(id, tip, pret) values (2,2, 100);
 insert into abonamente(id, tip, pret) values (3,3, 180);
 insert into abonamente(id, tip, pret) values (4,4, 300);
-
+/
 DECLARE
 
 v_rand1 int;
@@ -296,7 +301,7 @@ for i in 1..1000000 LOOP
     end if;
 END LOOP;
 END;
-
+/
 DECLARE
 v_rand_ex int;
 v_rand_gr int;
@@ -304,28 +309,41 @@ v_rand_set int;
 v_rand_rep int;
 v_rand int;
 j int := 0;
-p int;
+p int := 0;
+dat timestamp;
+
 BEGIN
+SELECT trunc(SYSDATE) - 100 into dat from dual;
 FOR i in 1..1000000 LOOP
     v_rand := DBMS_RANDOM.VALUE(1,100);
     if(v_rand < 30) then
-        p:= 1;
-        FOR i in 1..4 LOOP
+        p := mod((p + 1),30);
+        if(p = 1) then
+            dat := dat + 1;
+        end if;
+        FOR k in 1..DBMS_RANDOM.VALUE(4,7) LOOP
             j := j + 1;
             v_rand_ex := DBMS_RANDOM.VALUE(1,13);
             v_rand_gr := DBMS_RANDOM.VALUE(5,100);
             v_rand_set := DBMS_RANDOM.VALUE(3,7);
             v_rand_rep := DBMS_RANDOM.VALUE(5,15);
-            insert into antrenament(id, id_exercitiu, id_client, greutate, seturi, repetitii) values (j,v_rand_ex, i, v_rand_gr, v_rand_set, v_rand_rep);
+            insert into antrenament(id, id_exercitiu, id_client, greutate, seturi, repetitii, data_ant) values (j, v_rand_ex, i, v_rand_gr, v_rand_set, v_rand_rep, dat);
             
-            v_rand_gr := DBMS_RANDOM.VALUE(p,p+1);
-            insert into grupa_pref(id_muschi, id_client) values (v_rand_gr, i);
-            p := p + 2;
+            --v_rand_gr := DBMS_RANDOM.VALUE(p,p+1);
+            --insert into grupa_pref(id_muschi, id_client) values (v_rand_gr, i);
+            
             
         END LOOP;
     END IF;
 END LOOP;
 
 END;
+/
 
-
+DECLARE
+p int :=33;
+BEGIN
+ 
+p:= mod((p + 1),30);
+dbms_output.put_line(p);
+END;
