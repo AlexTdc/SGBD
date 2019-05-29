@@ -20,24 +20,30 @@ DROP TABLE antrenament  CASCADE CONSTRAINTS
 /
 DROP TABLE repartizare CASCADE CONSTRAINTS
 /
-DROP TABLE grupa_pref CASCADE CONSTRAINTS
+DROP TABLE onerpm CASCADE CONSTRAINTS
 /
 
 CREATE TABLE clienti (
 id int PRIMARY KEY NOT NULL,
+email varchar(100) not null unique,
 data_nastere DATE,
 nume VARCHAR(30),
 prenume VARCHAR(30),
 inaltime int,
 greutate int,
-experienta int
-)
+experienta int,
+sex int,
+nivel_activ int,
+prefer int,
+frecventa int
+);
+
 /
 CREATE TABLE abonamente (
 id int PRIMARY KEY NOT NULL,
 tip int,
 pret int
-)
+);
 /
 CREATE TABLE abonati (
 data_start date,
@@ -46,20 +52,20 @@ id_abonament int,
 id_client int,
 CONSTRAINT fk_id_abonament FOREIGN KEY (id_abonament) REFERENCES abonamente(id),
 CONSTRAINT fk_id_client FOREIGN KEY (id_client) REFERENCES clienti(id)
-)
+);
 /
 CREATE TABLE activitati (
 id int PRIMARY KEY NOT NULL,
 nume varchar(20),
 durata int
-)
+);
 /
 CREATE TABLE instructori (
 id int PRIMARY KEY NOT NULL,
 nume varchar(30),
 prenume varchar(30),
 data_angajare date
-)
+);
 /
 CREATE TABLE orar (
 id int PRIMARY KEY NOT NULL,
@@ -70,18 +76,18 @@ startOra varchar(10),
 endOra varchar(10),
 CONSTRAINT fk_id_activitate FOREIGN KEY (id_activitate) REFERENCES activitati(id),
 CONSTRAINT fk_id_instructor FOREIGN KEY (id_instructor) REFERENCES instructori(id)
-)
+);
 
 /
 CREATE TABLE exercitii (
 id int PRIMARY KEY NOT NULL,
 nume varchar(20)
-)
+);
 /
 CREATE TABLE muschi (
 id int PRIMARY KEY NOT NULL,
 nume varchar(20)
-)
+);
 /
 CREATE  TABLE lucreaza (
 id_exercitiu int,
@@ -89,21 +95,14 @@ id_muschi int,
 procent int,
 CONSTRAINT fk_id_exercitiu FOREIGN KEY (id_exercitiu) REFERENCES exercitii(id),
 CONSTRAINT fk_id_muschi FOREIGN KEY (id_muschi) REFERENCES muschi(id)
-)
+);
 /
 CREATE TABLE repartizare (
 id_client int,
 id_orar int,
 CONSTRAINT fk_id_client_repartizare FOREIGN KEY (id_client) REFERENCES clienti(id),
 CONSTRAINT fk_id_orar FOREIGN KEY (id_orar) REFERENCES orar(id)
-)
-/
-CREATE TABLE grupa_pref (
-id_muschi int,
-id_client int,
-CONSTRAINT fk_id_client_pref FOREIGN KEY (id_client) REFERENCES clienti(id),
-CONSTRAINT fk_id_muschi_pref FOREIGN KEY (id_muschi) REFERENCES muschi(id)
-)
+);
 /
 
 CREATE TABLE antrenament (
@@ -116,8 +115,17 @@ repetitii int,
 data_ant timestamp,
 CONSTRAINT fk_id_exercitiu_antrenament FOREIGN KEY (id_exercitiu) REFERENCES exercitii(id),
 CONSTRAINT fk_id_client_antrenament FOREIGN KEY (id_client) REFERENCES clienti(id)
-)
+);
 /
+CREATE TABLE ONERPM (
+id_client int,
+id_exercitiu int,
+rpm int,
+CONSTRAINT fk_id_exercitiu_rpm FOREIGN KEY (id_exercitiu) REFERENCES exercitii(id),
+CONSTRAINT fk_id_client_rpm FOREIGN KEY (id_client) REFERENCES clienti(id)
+);
+/
+
 SET SERVEROUTPUT ON;
 /
 DECLARE
@@ -219,7 +227,8 @@ BEGIN
   v_prenume :=  lista_prenume_baieti(DBMS_RANDOM.VALUE(1,lista_prenume_baieti.count));
   end if;
   v_nume := lista_nume(DBMS_RANDOM.VALUE(1,lista_nume.count));
-  insert into clienti(id, data_nastere, nume, prenume, inaltime, greutate, experienta) values (i, v_date, v_nume, v_prenume, DBMS_RANDOM.VALUE(140,190), DBMS_RANDOM.VALUE(40,120), DBMS_RANDOM.VALUE(1,5));  
+  insert into clienti(id, data_nastere, nume, prenume, inaltime, greutate, experienta, sex, nivel_activ, prefer) values
+    (i, v_date, v_nume, v_prenume, DBMS_RANDOM.VALUE(140,190), DBMS_RANDOM.VALUE(40,120), DBMS_RANDOM.VALUE(1,5), DBMS_RANDOM.VALUE(0,1), DBMS_RANDOM.VALUE(1,4), DBMS_RANDOM.VALUE(0,3));  
   end loop;
 END;
 /
@@ -291,14 +300,14 @@ dataF date;
 BEGIN
 for i in 1..1000000 LOOP
     v_rand1 :=  DBMS_RANDOM.VALUE(1,100);
-    if(v_rand1 < 80) then
+   
         id_ab :=  DBMS_RANDOM.VALUE(1,4);
         v_rand2 :=  DBMS_RANDOM.VALUE(1,24);
         v_rand3:=  DBMS_RANDOM.VALUE(1,v_rand2);
         dataS := add_months(sysdate, -v_rand2);
         dataF := add_months( sysdate, -v_rand2 + v_rand3);
         insert into abonati(data_start, data_fin, id_abonament, id_client) values (dataS, dataF, id_ab, i);
-    end if;
+   
 END LOOP;
 END;
 /
@@ -316,7 +325,7 @@ BEGIN
 SELECT trunc(SYSDATE) - 100 into dat from dual;
 FOR i in 1..1000000 LOOP
     v_rand := DBMS_RANDOM.VALUE(1,100);
-    if(v_rand < 30) then
+    
         p := mod((p + 1),30);
         if(p = 1) then
             dat := dat + 1;
@@ -329,21 +338,39 @@ FOR i in 1..1000000 LOOP
             v_rand_rep := DBMS_RANDOM.VALUE(5,15);
             insert into antrenament(id, id_exercitiu, id_client, greutate, seturi, repetitii, data_ant) values (j, v_rand_ex, i, v_rand_gr, v_rand_set, v_rand_rep, dat);
             
+            
+            
             --v_rand_gr := DBMS_RANDOM.VALUE(p,p+1);
             --insert into grupa_pref(id_muschi, id_client) values (v_rand_gr, i);
-            
-            
         END LOOP;
-    END IF;
+        
+        for j in 1..13 loop
+            insert into onerpm(id_exercitiu, id_client, rpm) values (j, i, DBMS_RANDOM.VALUE(20,220));
+        end loop;
+        
+  
 END LOOP;
 
 END;
+
+
+
 /
 
 DECLARE
-p int :=33;
+freg int;
+cli int;
 BEGIN
+    select count(id) into cli from clienti;
+    for i in 1..cli loop
+        freg := 0;
+        select count(id_client) into freg from repartizare;
+        update clienti set frecventa = freg where id = i; 
+    end loop;
  
-p:= mod((p + 1),30);
-dbms_output.put_line(p);
 END;
+
+/
+
+--CREATE INDEX frec ON clienti (frecventa);
+--CREATE INDEX expe ON clienti (experienta);
